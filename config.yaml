@@ -1,0 +1,50 @@
+influxdb:
+  url: http://localhost:8086
+  org: inosat
+  token: E7RRFtMhGQ9hNMX7rMNFrZmNWPnp4n3PgAyqXcfYG8TXKjre9-9ZQRINEEuN05ipeRLtXQyW0IIiMLgwq7k9GA==
+  bucket: inosatiot_oee_sim
+
+conf:
+  &machine
+  modes:
+    - name: stop
+      prob: 1
+      time_base: 50
+      time_var: 5
+      elec_coef: 0.1
+    - name: strt
+      prob: 5
+      time_base: 40
+      time_var: 5
+      elec_coef: 1
+    - name: hold
+      prob: 2
+      time_base: 5
+      time_var: 1
+      elec_coef: 0.3
+    - name: mstr
+      prob: 0.5
+      time_base: 40
+      time_var: 2
+      elec_coef: 0.6
+  electricity:
+    p:
+      base: 50000
+      var: 10000
+      delay: 600  # секунды
+  production:
+    time_base: 60 # секунды
+    time_var: 20  # секунды
+
+
+# prob - вероятность перехода в режим
+# time_base, time_var - время в минутах
+machines:
+  - params: *machine
+    name: machine1
+  - params: *machine
+    name: machine2
+  - params: *machine
+    name: machine3
+  - params: *machine
+    name: machine4
