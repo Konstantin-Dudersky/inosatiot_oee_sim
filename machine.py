@@ -7,6 +7,7 @@ import random
 class Machine:
     def __init__(self, now: datetime, config, name: str):
         self._name = name
+        self._config = config
 
         self._last_exec = now
 
@@ -26,6 +27,12 @@ class Machine:
 
         # потребленная активная ээ
         self._ep_imp = 0.0
+        self._ep_exp = 0.0
+
+        # производство деталей
+        self._prod_last = now
+        self._prod_delay = self._config['production']['time_base']
+        self._prod_counter = 0
 
     def __str__(self):
         s = ''
@@ -77,6 +84,17 @@ class Machine:
         elif self._p_current < 0:
             self._ep_exp += abs(p_current_mode) * delta.total_seconds() / 3600
 
+        # производство деталей
+        if self._modes[self._mode]['name'] == 'strt':
+            if now - self._prod_last >= timedelta(seconds=self._prod_delay):
+                r = random.random()
+                self._prod_delay = self._config['production']['time_base'] * (r + 1) + self._config['production'][
+                    'time_var'] * (r - 1)
+                self._prod_counter += 1
+                self._prod_last = now
+        else:
+            self._prod_last = now
+
         points.extend([
             Point(self._name)
                 .field("mode", self._modes[self._mode]['name'])
@@ -89,6 +107,11 @@ class Machine:
                 .tag('aggfunc', 'mean'),
             Point(self._name)
                 .field("ep_imp", self._ep_imp)
+                .time(now)
+                .tag('datatype', 'int')
+                .tag('aggfunc', 'increase'),
+            Point(self._name)
+                .field("prod", self._prod_counter)
                 .time(now)
                 .tag('datatype', 'int')
                 .tag('aggfunc', 'increase'),

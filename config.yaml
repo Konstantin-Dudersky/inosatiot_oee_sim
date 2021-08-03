@@ -1,8 +1,16 @@
+# local
 influxdb:
   url: http://localhost:8086
   org: inosat
   token: E7RRFtMhGQ9hNMX7rMNFrZmNWPnp4n3PgAyqXcfYG8TXKjre9-9ZQRINEEuN05ipeRLtXQyW0IIiMLgwq7k9GA==
   bucket: inosatiot_oee_sim
+
+# office server
+#influxdb:
+#  url: http://10.101.80.2:8086
+#  org: Inosat
+#  token: eXtcKYt7ELm81u5Hj2MgBx8EWc5mbbkRpN74yyWTRxWJ_MS3PIdUGQYporFLtT0eK1N82NmDtFXGbxM53t5tFw==
+#  bucket: inosatiot_oee_sim
 
 conf:
   &machine
@@ -33,8 +41,8 @@ conf:
       var: 10000
       delay: 600  # секунды
   production:
-    time_base: 60 # секунды
-    time_var: 20  # секунды
+    time_base: 40 # секунды
+    time_var: 5  # секунды
 
 
 # prob - вероятность перехода в режим
